@@ -94,7 +94,7 @@ public enum ActionButtonType {
     var mainColor: UIColor? {
         switch self {
         case .primary: return ActionButton.primaryColor
-        case .secondary: return .white
+        case .secondary: return ActionButton.secondaryColor
         case .connection: return ActionButton.primaryColor
         case .smoked: return ActionButton.separatorColor
         case .alert: return ActionButton.alertColor
@@ -112,7 +112,7 @@ public enum ActionButtonType {
             button.backgroundColor = ActionButton.primaryColor
             
         case .secondary:
-            button.backgroundColor = .white
+            button.backgroundColor = ActionButton.secondaryColor
             
         case .connection(let type):
             switch type {
@@ -129,7 +129,7 @@ public enum ActionButtonType {
             button.backgroundColor = ActionButton.alertColor
             
         case .loading:
-            button.backgroundColor = UIColor.white.withAlphaComponent(0.15)
+            button.backgroundColor = ActionButton.loadingColor
             
         case .animated:
             button.backgroundColor = .white
@@ -158,10 +158,12 @@ public typealias ActionButtonConfigurationData = (type: ActionButtonType, title:
 
 public class ActionButton: UIButton {
     public static var primaryColor: UIColor = .blue
+    public static var secondaryColor: UIColor = .purple
     public static var mainTextsColor: UIColor = .black
     public static var alertColor: UIColor = .red
     public static var confirmationColor: UIColor = .green
-    public static var separatorColor: UIColor = .green
+    public static var separatorColor: UIColor = .gray
+    public static var loadingColor: UIColor = .brown
     /// you can set a shape staically for all buttons or use a custom shape on each button
     public static var globalShape: UIView.ComponentShape = .capsule
     public var shape: UIView.ComponentShape?
@@ -208,7 +210,7 @@ public class ActionButton: UIButton {
     }
     private var _textColor: UIColor?
     
-    private lazy var loader: UIActivityIndicatorView = {
+    lazy var loader: UIActivityIndicatorView = {
         $0.hidesWhenStopped = true
         $0.color = self.actionButtonType.mainColor
         return $0
