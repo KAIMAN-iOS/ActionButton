@@ -12,6 +12,7 @@ import ColorExtension
 import FontExtension
 import StringExtension
 import UIViewExtension
+import SnapKit
 
 public enum ActionButtonType {
     case primary
@@ -210,9 +211,9 @@ public class ActionButton: UIButton {
     }
     private var _textColor: UIColor?
     
-    lazy var loader: UIActivityIndicatorView = {
+    public lazy var loader: UIActivityIndicatorView = {
         $0.hidesWhenStopped = true
-        $0.color = self.actionButtonType.mainColor
+        $0.color = self.actionButtonType.textColor
         return $0
     } (UIActivityIndicatorView(style: .white))
 
@@ -273,7 +274,9 @@ public class ActionButton: UIButton {
         case .loading:
             addSubview(loader)
             loader.startAnimating()
-            loader.center = center
+            loader.snp.makeConstraints { make in
+                make.center.equalToSuperview()
+            }
         
         default:
             contentEdgeInsets = .zero
