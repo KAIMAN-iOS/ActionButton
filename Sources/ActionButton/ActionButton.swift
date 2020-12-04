@@ -80,9 +80,9 @@ public enum ActionButtonType {
         }
     }
     
-    var fontType: FontType {
+    var fontType: UIFont.TextStyle {
         switch self {
-        default: return .button
+        default: return .callout
         }
     }
     
@@ -165,9 +165,13 @@ public class ActionButton: UIButton {
     public static var confirmationColor: UIColor = .green
     public static var separatorColor: UIColor = .gray
     public static var loadingColor: UIColor = .brown
+    // global settings
+    public static var useUppercasedTitles: Bool = true
     /// you can set a shape staically for all buttons or use a custom shape on each button
     public static var globalShape: UIView.ComponentShape = .capsule
     public var shape: UIView.ComponentShape?
+    // per component setting
+    public var useUppercasedTitles: Bool = true
     
     public override var isEnabled: Bool  {
         didSet {
@@ -301,6 +305,10 @@ public class ActionButton: UIButton {
     }
 
     public override func setTitle(_ title: String?, for state: UIControl.State) {
+        var title = title
+        if (useUppercasedTitles != ActionButton.useUppercasedTitles && useUppercasedTitles == true) || ActionButton.useUppercasedTitles == true {
+            title = title?.uppercased()
+        }
         self.setTitle(title, for: state, with: nil)
     }
 
@@ -309,6 +317,10 @@ public class ActionButton: UIButton {
     }
     
     private func attributedString(for title: String?, with color: UIColor?) -> NSAttributedString? {
+        var title = title
+        if (useUppercasedTitles != ActionButton.useUppercasedTitles && useUppercasedTitles == true) || ActionButton.useUppercasedTitles == true {
+            title = title?.uppercased()
+        }
         var attr: NSAttributedString!
         switch actionButtonType {
         default:
