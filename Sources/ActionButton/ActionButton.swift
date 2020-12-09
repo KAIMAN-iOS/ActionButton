@@ -82,7 +82,7 @@ public enum ActionButtonType {
     
     var fontType: UIFont.TextStyle {
         switch self {
-        default: return .callout
+        default: return .headline
         }
     }
     
@@ -233,6 +233,8 @@ public class ActionButton: UIButton {
         }
     }
     
+    public var fontType: UIFont.TextStyle?
+    
     public var actionButtonType: ActionButtonType = .primary {
         didSet {
             if isEnabled {
@@ -324,7 +326,7 @@ public class ActionButton: UIButton {
         var attr: NSAttributedString!
         switch actionButtonType {
         default:
-            attr = title?.asAttributedString(for: actionButtonType.fontType, textColor: (color ?? actionButtonType.textColor) ?? .black)
+            attr = title?.asAttributedString(for: fontType ?? actionButtonType.fontType, textColor: (color ?? actionButtonType.textColor) ?? .black)
         }
         if let shadowColor = actionButtonType.textShadowColor {
             attr = AText.init(attr.string, attributes: attr.attributes(at: 0, effectiveRange: nil)).shadow(color: shadowColor, radius: 5.0, x: 2, y: 2).attributedString
