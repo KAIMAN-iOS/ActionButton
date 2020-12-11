@@ -23,6 +23,7 @@ public enum ActionButtonType {
     case loading
     case animated
     case swipeCardButton(isYesButton: Bool)
+    case progress(backgroundColor: UIColor?, fillColor: UIColor?)
     
     public enum ConnectionType {
         case facebook
@@ -102,6 +103,7 @@ public enum ActionButtonType {
         case .loading: return ActionButton.primaryColor
         case .animated: return .white
         case .swipeCardButton(let isYesButton): return isYesButton ? ActionButton.alertColor : ActionButton.confirmationColor
+        case .progress(let backgroundColor, _): return backgroundColor ?? ActionButton.mainTextsColor
         }
     }
     
@@ -135,7 +137,11 @@ public enum ActionButtonType {
         case .animated:
             button.backgroundColor = .white
             
-        case .swipeCardButton(let isYesButton): button.backgroundColor = isYesButton ? ActionButton.alertColor : ActionButton.confirmationColor
+        case .swipeCardButton(let isYesButton):
+            button.backgroundColor = isYesButton ? ActionButton.alertColor : ActionButton.confirmationColor
+            
+        case .progress(let backgroundColor, _):
+            button.backgroundColor = backgroundColor ?? ActionButton.mainTextsColor
         }
     }
 }
@@ -158,20 +164,28 @@ public func == (lhs: ActionButtonType, rhs: ActionButtonType) -> Bool {
 public typealias ActionButtonConfigurationData = (type: ActionButtonType, title: String, completion: (() -> Void)?)
 
 public class ActionButton: UIButton {
-    public static var primaryColor: UIColor = .blue
-    public static var secondaryColor: UIColor = .purple
-    public static var mainTextsColor: UIColor = .black
+    public static var primaryColor: UIColor = #colorLiteral(red: 0.8313725591, green: 0.2156862766, blue: 0.180392161, alpha: 1)
+    public static var secondaryColor: UIColor = #colorLiteral(red: 0.1176470593, green: 0.1294117719, blue: 0.1568627506, alpha: 1)
+    public static var mainTextsColor: UIColor = #colorLiteral(red: 0.9686274529, green: 0.9764705896, blue: 0.9882352948, alpha: 1)
     public static var alertColor: UIColor = .red
-    public static var confirmationColor: UIColor = .green
+    public static var confirmationColor: UIColor = #colorLiteral(red: 0.5176470876, green: 0.7372549176, blue: 0.3333333433, alpha: 1)
     public static var separatorColor: UIColor = .gray
-    public static var loadingColor: UIColor = .brown
+    public static var loadingColor: UIColor = #colorLiteral(red: 0.9019607902, green: 0.3490196168, blue: 0.3254902065, alpha: 1)
     // global settings
     public static var useUppercasedTitles: Bool = true
     /// you can set a shape staically for all buttons or use a custom shape on each button
-    public static var globalShape: UIView.ComponentShape = .capsule
+    public static var globalShape: UIView.ComponentShape = .rounded(value: 5)
     public var shape: UIView.ComponentShape?
     // per component setting
     public var useUppercasedTitles: Bool = true
+    // progress stuff
+    var timer: Timer?
+    private var loadingView: PlainProgressBar?
+    public var progress: CGFloat = 0  {
+        didSet {
+            setNeedsLayout()
+        }
+    }
     
     public override var isEnabled: Bool  {
         didSet {
@@ -283,8 +297,23 @@ public class ActionButton: UIButton {
             loader.snp.makeConstraints { make in
                 make.center.equalToSuperview()
             }
+            
+        case .progress:
+            if loadingView == nil {
+                progress = 0.0
+                loadingView = PlainProgressBar(frame: bounds)
+                insertSubview(loadingView!, at: 0)
+                loadingView?.snp.makeConstraints({ make in
+                    make.edges.equalToSuperview()
+                })
+                (shape ?? ActionButton.globalShape).applyShape(on: loadingView!)
+                loadingView?.isUserInteractionEnabled = false
+            }
         
         default:
+            loadingView?.removeFromSuperview()
+            loadingView = nil
+            timer?.invalidate()
             contentEdgeInsets = .zero
             titleEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)//.zero
             contentHorizontalAlignment = .center
@@ -337,6 +366,28 @@ public class ActionButton: UIButton {
     public override func layoutSubviews() {
         super.layoutSubviews()
         (shape ?? ActionButton.globalShape).applyShape(on: self)
+        if case let ActionButtonType.progress(_, _) = actionButtonType {
+            loadingView?.progress = progress
+            print("\(progress)")
+        }
+    }    
+}
+
+public extension ActionButton {
+    func startProgressUpdate(for time: CGFloat, endCompletion: @escaping (() -> Void)) {
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1,
+                                     repeats: true,
+                                     block: { [weak self] _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.progress += (0.1 / time)
+                guard self.progress < 1 else {
+                    self.progress = 1
+                    self.timer?.invalidate()
+                    endCompletion()
+                    return
+                }
+            }
+        })
     }
-    
 }
