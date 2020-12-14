@@ -298,10 +298,11 @@ public class ActionButton: UIButton {
                 make.center.equalToSuperview()
             }
             
-        case .progress:
+        case .progress(_, let color):
             if loadingView == nil {
                 progress = 0.0
                 loadingView = PlainProgressBar(frame: bounds)
+                loadingView?.color = color ?? .gray
                 insertSubview(loadingView!, at: 0)
                 loadingView?.snp.makeConstraints({ make in
                     make.edges.equalToSuperview()
