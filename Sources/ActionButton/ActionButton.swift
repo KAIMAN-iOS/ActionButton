@@ -186,6 +186,7 @@ public class ActionButton: UIButton {
             setNeedsLayout()
         }
     }
+    var shouldUpdateProgress: Bool = true
     
     public override var isEnabled: Bool  {
         didSet {
@@ -297,6 +298,11 @@ public class ActionButton: UIButton {
             loader.snp.makeConstraints { make in
                 make.center.equalToSuperview()
             }
+            switch actionButtonType {
+            case .progress(let backgroundColor, _): self.backgroundColor = backgroundColor?.withAlphaComponent(0.5) ?? ActionButton.mainTextsColor.withAlphaComponent(0.5)
+                
+            default: ()
+            }
             
         case .progress(_, let color):
             if loadingView == nil {
@@ -367,28 +373,40 @@ public class ActionButton: UIButton {
     public override func layoutSubviews() {
         super.layoutSubviews()
         (shape ?? ActionButton.globalShape).applyShape(on: self)
-        if case let ActionButtonType.progress(_, _) = actionButtonType {
+        if case let ActionButtonType.progress(_, _) = actionButtonType,
+           shouldUpdateProgress {
             loadingView?.progress = progress
-            print("\(progress)")
         }
     }    
 }
 
 public extension ActionButton {
-    func startProgressUpdate(for time: CGFloat, endCompletion: @escaping (() -> Void)) {
+    func startProgressUpdate(at start: CGFloat = 0, for time: CGFloat, endCompletion: @escaping (() -> Void)) {
+        progress = start / time
         timer = Timer.scheduledTimer(withTimeInterval: 0.1,
                                      repeats: true,
                                      block: { [weak self] _ in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.progress += (0.1 / time)
-                guard self.progress < 1 else {
-                    self.progress = 1
+                
+                guard self.timer != nil,
+                      self.progress < 1 else {
+                        self.progress = 1
                     self.timer?.invalidate()
+                    self.timer = nil
                     endCompletion()
                     return
                 }
             }
         })
+    }
+    
+    func stopProgress() {
+        shouldUpdateProgress = false
+    }
+    
+    func restartTimer(completion: @escaping ((Bool) -> Void)) {
+        shouldUpdateProgress = true
     }
 }
