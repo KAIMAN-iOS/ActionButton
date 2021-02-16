@@ -17,6 +17,7 @@ import SnapKit
 public enum ActionButtonType {
     case primary
     case secondary
+    case confirmation
     case connection(type: ConnectionType)
     case smoked
     case alert
@@ -101,6 +102,7 @@ public enum ActionButtonType {
         case .smoked: return ActionButton.separatorColor
         case .alert: return ActionButton.alertColor
         case .loading: return ActionButton.primaryColor
+        case .confirmation: return ActionButton.confirmationColor
         case .animated: return .white
         case .swipeCardButton(let isYesButton): return isYesButton ? ActionButton.alertColor : ActionButton.confirmationColor
         case .progress(let backgroundColor, _): return backgroundColor ?? ActionButton.mainTextsColor
@@ -133,6 +135,9 @@ public enum ActionButtonType {
             
         case .loading:
             button.backgroundColor = ActionButton.loadingColor
+            
+        case .confirmation:
+            button.backgroundColor = ActionButton.confirmationColor
             
         case .animated:
             button.backgroundColor = .white
