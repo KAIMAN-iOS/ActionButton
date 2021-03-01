@@ -18,6 +18,7 @@ public enum ActionButtonType {
     case primary
     case secondary
     case confirmation
+    case complementary
     case connection(type: ConnectionType)
     case smoked
     case alert
@@ -103,6 +104,7 @@ public enum ActionButtonType {
         case .alert: return ActionButton.alertColor
         case .loading: return ActionButton.primaryColor
         case .confirmation: return ActionButton.confirmationColor
+        case .complementary: return ActionButton.complementaryColor
         case .animated: return .white
         case .swipeCardButton(let isYesButton): return isYesButton ? ActionButton.alertColor : ActionButton.confirmationColor
         case .progress(let backgroundColor, _): return backgroundColor ?? ActionButton.mainTextsColor
@@ -132,6 +134,9 @@ public enum ActionButtonType {
             
         case .alert:
             button.backgroundColor = ActionButton.alertColor
+            
+        case .complementary:
+            button.backgroundColor = ActionButton.complementaryColor
             
         case .loading:
             button.backgroundColor = ActionButton.loadingColor
@@ -176,6 +181,7 @@ public class ActionButton: UIButton {
     public static var confirmationColor: UIColor = #colorLiteral(red: 0.5176470876, green: 0.7372549176, blue: 0.3333333433, alpha: 1)
     public static var separatorColor: UIColor = .gray
     public static var loadingColor: UIColor = #colorLiteral(red: 0.9019607902, green: 0.3490196168, blue: 0.3254902065, alpha: 1)
+    public static var complementaryColor: UIColor = #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
     // global settings
     public static var useUppercasedTitles: Bool = true
     /// you can set a shape staically for all buttons or use a custom shape on each button
