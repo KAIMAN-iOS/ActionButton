@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+
 @IBDesignable
 class GradientProgressBar: UIView {
     @IBInspectable var color: UIColor = .gray {

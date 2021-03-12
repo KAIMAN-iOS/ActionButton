@@ -16,6 +16,49 @@ import SnapKit
 import Haptica
 import Peep
 
+open class FeedbackButton: UIButton {
+    public init() {
+        super.init(frame: .zero)
+        addFeedback()
+    }
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        addFeedback()
+    }
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+        addFeedback()
+    }
+    public var usesHaptics: Bool = true  {
+        didSet {
+            isHaptic = usesHaptics
+            hapticType = hapticValue
+        }
+    }
+    public var hapticValue: Haptic = .impact(.medium)
+    public var hapticSequence: [Note]? = nil //[.haptic(.impact(.light)), .haptic(.impact(.heavy)), .wait(0.1), .haptic(.impact(.heavy)), .haptic(.impact(.light))]
+    // MARK: - Sound
+    public var playSoundOnTouch: Bool = true
+    public var sound: Peepable = KeyPress.tap
+    
+    private func addFeedback() {
+        addTarget(self, action: #selector(handleFeedback), for: .touchUpInside)
+    }
+    
+    @objc func handleFeedback() {
+        if playSoundOnTouch {
+            Peep.play(sound: sound)
+        }
+        if usesHaptics {
+            if let notes = hapticSequence {
+                Haptic.play(notes)
+            } else {
+                hapticValue.generate()
+            }
+        }
+    }
+}
+
 public enum ActionButtonType {
     case primary
     case secondary
@@ -175,7 +218,7 @@ public func == (lhs: ActionButtonType, rhs: ActionButtonType) -> Bool {
 
 public typealias ActionButtonConfigurationData = (type: ActionButtonType, title: String, completion: (() -> Void)?)
 
-public class ActionButton: UIButton {
+public class ActionButton: FeedbackButton {
     public static var primaryColor: UIColor = #colorLiteral(red: 0.8313725591, green: 0.2156862766, blue: 0.180392161, alpha: 1)
     public static var secondaryColor: UIColor = #colorLiteral(red: 0.1176470593, green: 0.1294117719, blue: 0.1568627506, alpha: 1)
     public static var mainTextsColor: UIColor = #colorLiteral(red: 0.9686274529, green: 0.9764705896, blue: 0.9882352948, alpha: 1)
@@ -200,41 +243,6 @@ public class ActionButton: UIButton {
         }
     }
     var shouldUpdateProgress: Bool = true
-    // MARK: - Haptics
-    public var usesHaptics: Bool = true  {
-        didSet {
-            isHaptic = usesHaptics
-            hapticType = hapticValue
-        }
-    }
-    public var hapticValue: Haptic = .impact(.light)
-    public var hapticSequence: [Note]? = [.haptic(.impact(.light)), .haptic(.impact(.heavy)), .wait(0.1), .haptic(.impact(.heavy)), .haptic(.impact(.light))]
-    
-    // MARK: - Sound
-    public var playSoundOnTouch: Bool = true  {
-        didSet {
-            updateSound()
-        }
-    }
-    func updateSound() {
-        if playSoundOnTouch {
-            addTarget(self, action: #selector(play), for: .touchUpInside)
-        } else {
-            removeTarget(self, action: #selector(play), for: .touchUpInside)
-        }
-    }
-    @objc func play() {
-        Peep.play(sound: sound)
-        if usesHaptics {
-            if let notes = hapticSequence {
-                Haptic.play(notes)
-            } else {
-                hapticValue.generate()
-            }
-        }
-    }
-
-    public var sound: Peepable = KeyPress.tap
     
     public override var isEnabled: Bool  {
         didSet {
@@ -317,7 +325,7 @@ public class ActionButton: UIButton {
             loader.stopAnimating()
             layoutIfNeeded()
         }
-        updateSound()
+        hapticSequence = [.haptic(.impact(.light)), .haptic(.impact(.heavy)), .wait(0.1), .haptic(.impact(.heavy)), .haptic(.impact(.light))]
         titleLabel?.typeObserver = true
         titleLabel?.minimumScaleFactor = 0.5
         titleLabel?.adjustsFontSizeToFitWidth = true
