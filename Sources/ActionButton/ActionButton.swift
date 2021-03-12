@@ -13,6 +13,8 @@ import FontExtension
 import StringExtension
 import UIViewExtension
 import SnapKit
+import Haptica
+import Peep
 
 public enum ActionButtonType {
     case primary
@@ -198,6 +200,41 @@ public class ActionButton: UIButton {
         }
     }
     var shouldUpdateProgress: Bool = true
+    // MARK: - Haptics
+    public var usesHaptics: Bool = true  {
+        didSet {
+            isHaptic = usesHaptics
+            hapticType = hapticValue
+        }
+    }
+    public var hapticValue: Haptic = .impact(.light)
+    public var hapticSequence: [Note]? = [.haptic(.impact(.light)), .haptic(.impact(.heavy)), .wait(0.1), .haptic(.impact(.heavy)), .haptic(.impact(.light))]
+    
+    // MARK: - Sound
+    public var playSoundOnTouch: Bool = true  {
+        didSet {
+            updateSound()
+        }
+    }
+    func updateSound() {
+        if playSoundOnTouch {
+            addTarget(self, action: #selector(play), for: .touchUpInside)
+        } else {
+            removeTarget(self, action: #selector(play), for: .touchUpInside)
+        }
+    }
+    @objc func play() {
+        Peep.play(sound: sound)
+        if usesHaptics {
+            if let notes = hapticSequence {
+                Haptic.play(notes)
+            } else {
+                hapticValue.generate()
+            }
+        }
+    }
+
+    public var sound: Peepable = KeyPress.tap
     
     public override var isEnabled: Bool  {
         didSet {
@@ -280,7 +317,7 @@ public class ActionButton: UIButton {
             loader.stopAnimating()
             layoutIfNeeded()
         }
-        
+        updateSound()
         titleLabel?.typeObserver = true
         titleLabel?.minimumScaleFactor = 0.5
         titleLabel?.adjustsFontSizeToFitWidth = true

@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "Haptica",
+        "repositoryURL": "https://github.com/efremidze/Haptica",
+        "state": {
+          "branch": "master",
+          "revision": "4084702c85102c2d17d58e42ec5a750094944864",
+          "version": null
+        }
+      },
+      {
         "package": "KExtensions",
         "repositoryURL": "https://github.com/jerometonnelier/KExtensions",
         "state": {
@@ -35,6 +44,15 @@
           "branch": null,
           "revision": "ef122e4512e84020dca9d8f598408fdb38658946",
           "version": "9.2.0"
+        }
+      },
+      {
+        "package": "Peep",
+        "repositoryURL": "https://github.com/efremidze/Peep",
+        "state": {
+          "branch": null,
+          "revision": "6ba6217b6fa53d53e635f20ed225261398b32116",
+          "version": "3.0.0"
         }
       },
       {

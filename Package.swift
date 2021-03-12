@@ -17,12 +17,15 @@ let package = Package(
         .package(url: "https://github.com/ethanhuang13/NSAttributedStringBuilder", from: "0.3.0"),
         .package(url: "https://github.com/jerometonnelier/KExtensions", from: "1.0.0"),
         .package(url: "https://github.com/SnapKit/SnapKit", from: "5.0.0"),
+        .package(url: "https://github.com/efremidze/Haptica",  .branch("master")),
+        .package(url: "https://github.com/efremidze/Peep", from: "3.0.0")
+
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "ActionButton",
-            dependencies: ["NSAttributedStringBuilder", "KExtensions", "SnapKit"])
+            dependencies: ["NSAttributedStringBuilder", "KExtensions", "SnapKit", "Haptica", "Peep"])
     ]
 )
