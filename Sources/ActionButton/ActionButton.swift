@@ -386,7 +386,7 @@ public class ActionButton: FeedbackButton {
     }
 
     
-    init(frame: CGRect, type: ActionButtonType = .primary) {
+    public init(frame: CGRect = .zero, type: ActionButtonType = .primary) {
         defer {
             actionButtonType = type
         }
