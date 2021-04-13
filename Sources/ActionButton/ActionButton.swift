@@ -96,7 +96,6 @@ public enum ActionButtonType {
     
     var strokeColor: UIColor? {
         switch self {
-        case .secondary: return ActionButton.separatorColor
         case .primary: return ActionButton.primaryColor
         default: return nil
         }
@@ -104,8 +103,6 @@ public enum ActionButtonType {
     
     var strokeWidth: CGFloat {
         switch self {
-        case .secondary:
-            return 2.0
         default:
             return 0
         }
@@ -113,7 +110,7 @@ public enum ActionButtonType {
     
     var textColor: UIColor? {
         switch self {
-        case .secondary: return ActionButton.primaryColor
+        case .secondary: return ActionButton.textOnPrimaryColor
         case .animated: return ActionButton.mainTextsColor
         case .loading: return UIColor.white.withAlphaComponent(0.7)
         case .alert: return .white
@@ -222,6 +219,7 @@ public class ActionButton: FeedbackButton {
     public static var primaryColor: UIColor = #colorLiteral(red: 0.8313725591, green: 0.2156862766, blue: 0.180392161, alpha: 1)
     public static var secondaryColor: UIColor = #colorLiteral(red: 0.1176470593, green: 0.1294117719, blue: 0.1568627506, alpha: 1)
     public static var mainTextsColor: UIColor = #colorLiteral(red: 0.9686274529, green: 0.9764705896, blue: 0.9882352948, alpha: 1)
+    public static var textOnPrimaryColor: UIColor = #colorLiteral(red: 0.9686274529, green: 0.9764705896, blue: 0.9882352948, alpha: 1)
     public static var alertColor: UIColor = .red
     public static var confirmationColor: UIColor = #colorLiteral(red: 0.5176470876, green: 0.7372549176, blue: 0.3333333433, alpha: 1)
     public static var separatorColor: UIColor = .gray
