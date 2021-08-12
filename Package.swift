@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/ethanhuang13/NSAttributedStringBuilder", from: "0.3.0"),
-        .package(url: "https://github.com/jerometonnelier/KExtensions", from: "1.0.0"),
+        .package(url: "https://github.com/KAIMAN-iOS/KExtensions", .branch("master")),
         .package(url: "https://github.com/SnapKit/SnapKit", from: "5.0.0"),
         .package(url: "https://github.com/efremidze/Haptica",  .branch("master")),
         .package(url: "https://github.com/efremidze/Peep", from: "3.0.0")

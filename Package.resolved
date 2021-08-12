@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire",
+        "state": {
+          "branch": null,
+          "revision": "f96b619bcb2383b43d898402283924b80e2c4bae",
+          "version": "5.4.3"
+        }
+      },
+      {
         "package": "Ampersand",
         "repositoryURL": "https://github.com/darjeelingsteve/Ampersand",
         "state": {
@@ -21,11 +30,20 @@
       },
       {
         "package": "KExtensions",
-        "repositoryURL": "https://github.com/jerometonnelier/KExtensions",
+        "repositoryURL": "https://github.com/KAIMAN-iOS/KExtensions",
+        "state": {
+          "branch": "master",
+          "revision": "4ff83a59c9e51088fd32804f493cd08f1e4b2b7d",
+          "version": null
+        }
+      },
+      {
+        "package": "KStorage",
+        "repositoryURL": "https://github.com/jerometonnelier/KStorage",
         "state": {
           "branch": null,
-          "revision": "8e29ed4a1b0ee56f1bd7f858acb1b88bd7d5c810",
-          "version": "1.0.20"
+          "revision": "330de84d7b9601468a842c099c7627069ab92016",
+          "version": "1.0.0"
         }
       },
       {
@@ -42,8 +60,8 @@
         "repositoryURL": "https://github.com/kean/Nuke",
         "state": {
           "branch": null,
-          "revision": "ef122e4512e84020dca9d8f598408fdb38658946",
-          "version": "9.2.0"
+          "revision": "7f73ceaeacd5df75a7994cd82e165ad9ff1815db",
+          "version": "9.6.1"
         }
       },
       {
@@ -53,6 +71,15 @@
           "branch": null,
           "revision": "6ba6217b6fa53d53e635f20ed225261398b32116",
           "version": "3.0.0"
+        }
+      },
+      {
+        "package": "PromiseKit",
+        "repositoryURL": "https://github.com/mxcl/PromiseKit",
+        "state": {
+          "branch": null,
+          "revision": "d2f7ba14bcdc45e18f4f60ad9df883fb9055f081",
+          "version": "6.15.3"
         }
       },
       {
